@@ -13,23 +13,9 @@ services:
       - "8000"
     env_file:
       - ./.envs/.local/.django
-      - ./.envs/.local/.postgres
     depends_on:
-      - postgres
       - mailhog
     command: /start
-    networks:
-      - authors-api
-
-  postgres:
-    build:
-      context: .
-      dockerfile: ./docker/local/postgres/Dockerfile
-    volumes:
-      - local_postgres_data:/var/lib/postgresql/data
-      - local_postgres_backups:/backups
-    env_file:
-      - ./.envs/.local/.postgres
     networks:
       - authors-api
 
@@ -55,10 +41,8 @@ services:
       - .:/app
     env_file:
       - ./.envs/.local/.django
-      - ./.envs/.local/.postgres
     depends_on:
       - redis
-      - postgres
       - mailhog
     networks:
       - authors-api
@@ -72,12 +56,10 @@ services:
       - flower_data:/data
     env_file:
       - ./.envs/.local/.django
-      - ./.envs/.local/.postgres
     ports:
       - "5555:5555"
     depends_on:
       - redis
-      - postgres
     networks:
       - authors-api
 
